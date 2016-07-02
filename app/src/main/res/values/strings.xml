@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kayak</string>
+    <string name="title_kmap">Karnaugh Map\nSolver</string>
 </resources>

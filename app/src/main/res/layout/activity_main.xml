@@ -3,10 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tarellano.kayak.MainActivity">
+
+    <TextView
+        android:id="@+id/kmapTitle"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:text="@string/title_kmap"
+        style="@style/ContentTitle"
+        />
+
+    <TextView
+        android:id="@+id/kmapContent"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/kmapTitle"
+        android:text="\nAn interactive karnaugh map solver.\n\nUsing the Quine McCluskey Algorithm \n\nWith helpful visuals.\n\n\n\nby thomas"
+        style="@style/ContentBody"
+        />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/kmapTitle"
+        android:src="@drawable/empty_kmap"
+        />
 
 </RelativeLayout>
