@@ -5,7 +5,9 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,8 +18,14 @@ import com.tarellano.kayak.R;
  */
 public class KMapView extends View {
 
-    private Paint mBackgroundPaint;
+    private final static String TAG = "kmapView";
+
     private Paint mLinePaint;
+    private Paint mBackgroundPaint;
+
+    private static final int STROKE_WIDTH = 8;
+
+    private Rect map;
 
 
     private Path mPath = new Path();
@@ -33,26 +41,44 @@ public class KMapView extends View {
     }
 
     private void init(){
-        mBackgroundPaint = new Paint(0);
-        mBackgroundPaint.setColor(0xff515151);
-        mBackgroundPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
-        mBackgroundPaint.setAntiAlias(true);
-        mBackgroundPaint.setStyle(Paint.Style.STROKE);
 
         mLinePaint = new Paint(0);
-        mLinePaint.setColor(getResources().getColor(R.color.bluegrass));
-        mLinePaint.setStyle(Paint.Style.FILL);
+        mLinePaint.setColor(0xff515151);
+        mLinePaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
+        mLinePaint.setAntiAlias(true);
+        mLinePaint.setStyle(Paint.Style.STROKE);
+        mLinePaint.setStrokeWidth(STROKE_WIDTH);
 
+        mBackgroundPaint = new Paint(0);
+        mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-        //canvas.drawLine(0,0, getWidth(), getHeight(), mBackgroundPaint);
+        //canvas.drawLine(0,0, getWidth(), getHeight(), mLinePaint);
 
-        canvas.drawRect(0, 0, getWidth(), getHeight(), mLinePaint);
-        canvas.drawPath(mPath, mBackgroundPaint);
+
+        Log.d(TAG, "" + getWidth());
+        canvas.drawRect(map, mBackgroundPaint);
+
+        int boxWidth = (map.width() - (4 * STROKE_WIDTH))/5;
+
+        for (int i = 0; i < 4; i++){
+            int x = map.left + ((i + 1) * boxWidth) + ((i) * STROKE_WIDTH);
+            canvas.drawLine(x, map.top, x, map.bottom, mLinePaint);
+        }
+
+        for (int i = 0; i < 4; i++){
+            int y = map.top + ((i + 1) * boxWidth) + ((i) * STROKE_WIDTH);
+            canvas.drawLine(map.left, y, map.right, y, mLinePaint);
+        }
+
+
+
+        canvas.drawPath(mPath, mLinePaint);
 
     }
 
@@ -63,6 +89,11 @@ public class KMapView extends View {
 
         float ww = (float)w - xpad;
         float hh = (float)h - ypad;
+
+        map = new Rect(0,
+                getHeight() / 2 - getWidth() / 2,
+                getWidth(),
+                getHeight() / 2 + getWidth() / 2);
     }
 
     @Override
