@@ -24,8 +24,10 @@ public class KMapView extends View {
     private Paint mBackgroundPaint;
 
     private static final int STROKE_WIDTH = 8;
+    private static final int NUMBER_OF_VARIABLES = 4;
 
     private Rect map;
+    private Rect[] boxes;
 
 
     private Path mPath = new Path();
@@ -61,21 +63,12 @@ public class KMapView extends View {
         //canvas.drawLine(0,0, getWidth(), getHeight(), mLinePaint);
 
 
-        Log.d(TAG, "" + getWidth());
         canvas.drawRect(map, mBackgroundPaint);
 
-        int boxWidth = (map.width() - (4 * STROKE_WIDTH))/5;
 
-        for (int i = 0; i < 4; i++){
-            int x = map.left + ((i + 1) * boxWidth) + ((i) * STROKE_WIDTH);
-            canvas.drawLine(x, map.top, x, map.bottom, mLinePaint);
+        for (Rect box : boxes) {
+            canvas.drawRect(box, mLinePaint);
         }
-
-        for (int i = 0; i < 4; i++){
-            int y = map.top + ((i + 1) * boxWidth) + ((i) * STROKE_WIDTH);
-            canvas.drawLine(map.left, y, map.right, y, mLinePaint);
-        }
-
 
 
         canvas.drawPath(mPath, mLinePaint);
@@ -90,10 +83,24 @@ public class KMapView extends View {
         float ww = (float)w - xpad;
         float hh = (float)h - ypad;
 
+        Log.d(TAG, "Width: " + ww + "; Height: " + hh);
+
         map = new Rect(0,
                 getHeight() / 2 - getWidth() / 2,
                 getWidth(),
                 getHeight() / 2 + getWidth() / 2);
+
+        int side = map.width()/5;
+        boxes = new Rect[NUMBER_OF_VARIABLES * NUMBER_OF_VARIABLES];
+        for (int i = 0; i < NUMBER_OF_VARIABLES; i++){
+            for (int j = 0; j < NUMBER_OF_VARIABLES; j++){
+                int left = map.left + side + (i * side);
+                int top = map.top + side + (j * side);
+                int right = left + side;
+                int bottom = top + side;
+                boxes[i + (j * NUMBER_OF_VARIABLES)] = new Rect(left, top, right, bottom);
+            }
+        }
     }
 
     @Override
