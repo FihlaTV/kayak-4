@@ -22,6 +22,7 @@ public class KMapView extends View {
 
     private Paint mLinePaint;
     private Paint mBackgroundPaint;
+    private Paint mBoxPaint;
 
     private static final int STROKE_WIDTH = 8;
     private static final int NUMBER_OF_VARIABLES = 4;
@@ -44,35 +45,36 @@ public class KMapView extends View {
 
     private void init(){
 
+
+        mBackgroundPaint = new Paint(0);
+        mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
+
         mLinePaint = new Paint(0);
-        mLinePaint.setColor(0xff515151);
+        mLinePaint.setColor(getResources().getColor(R.color.black));
         mLinePaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
         mLinePaint.setAntiAlias(true);
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setStrokeWidth(STROKE_WIDTH);
 
-        mBackgroundPaint = new Paint(0);
-        mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
-        mBackgroundPaint.setStyle(Paint.Style.FILL);
+        mBoxPaint = new Paint(0);
+        mBoxPaint.setColor(getResources().getColor(R.color.seafoam));
+        mBoxPaint.setStyle(Paint.Style.FILL);
+
+
     }
 
     @Override
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-        //canvas.drawLine(0,0, getWidth(), getHeight(), mLinePaint);
-
-
         canvas.drawRect(map, mBackgroundPaint);
 
-
         for (Rect box : boxes) {
-            canvas.drawRect(box, mLinePaint);
+            canvas.drawRect(box, mBoxPaint);
         }
 
-
         canvas.drawPath(mPath, mLinePaint);
-
     }
 
     @Override
@@ -90,12 +92,12 @@ public class KMapView extends View {
                 getWidth(),
                 getHeight() / 2 + getWidth() / 2);
 
-        int side = map.width()/5;
+        int side = map.width()/5 - STROKE_WIDTH;
         boxes = new Rect[NUMBER_OF_VARIABLES * NUMBER_OF_VARIABLES];
         for (int i = 0; i < NUMBER_OF_VARIABLES; i++){
             for (int j = 0; j < NUMBER_OF_VARIABLES; j++){
-                int left = map.left + side + (i * side);
-                int top = map.top + side + (j * side);
+                int left = map.left + side + (i * (side + STROKE_WIDTH));
+                int top = map.top + side + (j * (side + STROKE_WIDTH));
                 int right = left + side;
                 int bottom = top + side;
                 boxes[i + (j * NUMBER_OF_VARIABLES)] = new Rect(left, top, right, bottom);
