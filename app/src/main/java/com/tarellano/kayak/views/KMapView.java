@@ -37,9 +37,8 @@ public class KMapView extends View {
 
             for (Box box: boxes){
                 if (box.getRect().intersect(loc.x, loc.y, loc.x, loc.y)){
-
-                    box.setBackgroundPaint(mAltBoxPaint);
-
+                    box.setColor(getResources().getColor(R.color.chartreuse));
+                    invalidate();
                     return true;
                 }
             }
@@ -73,6 +72,10 @@ public class KMapView extends View {
 
         public void setRect(Rect mCoordinates) {
             this.mRect = mCoordinates;
+        }
+
+        public void setColor(int color){
+            this.mBackgroundPaint.setColor(color);
         }
     }
 
@@ -163,7 +166,10 @@ public class KMapView extends View {
                 int right = left + side;
                 int bottom = top + side;
                 //boxes[i + (j * NUMBER_OF_VARIABLES)] = new Rect(left, top, right, bottom);
-                boxes.add(j + (i * NUMBER_OF_VARIABLES), new Box(new Rect(left, top, right, bottom), mBoxPaint));
+                Paint nBoxPaint = new Paint(0);
+                nBoxPaint.setColor(getResources().getColor(R.color.seafoam));
+                nBoxPaint.setStyle(Paint.Style.FILL);
+                boxes.add(j + (i * NUMBER_OF_VARIABLES), new Box(new Rect(left, top, right, bottom), nBoxPaint));
             }
         }
     }
