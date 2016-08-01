@@ -43,6 +43,17 @@ public class KMapView extends View {
                 }
             }
 
+            if (map.intersect(loc.x, loc.y, loc.x, loc.y)){
+
+                mBackgroundPaint = new Paint(0);
+                mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
+                mBackgroundPaint.setStyle(Paint.Style.FILL);
+
+                Log.d(TAG, mBackgroundPaint.toString());
+                invalidate();
+                return true;
+            }
+
 
             return true;
         }
@@ -133,6 +144,7 @@ public class KMapView extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
+        Log.d(TAG, mBackgroundPaint.toString());
         canvas.drawRect(map, mBackgroundPaint);
 
         for (Box box : boxes) {
