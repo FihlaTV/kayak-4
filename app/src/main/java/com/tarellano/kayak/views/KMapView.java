@@ -37,7 +37,7 @@ public class KMapView extends View {
 
             for (Box box: boxes){
                 if (box.getRect().intersect(loc.x, loc.y, loc.x, loc.y)){
-                    box.setColor(getResources().getColor(R.color.chartreuse));
+                    box.setColor(getResources().getColor(R.color.seafoam));
                     invalidate();
                     return true;
                 }
