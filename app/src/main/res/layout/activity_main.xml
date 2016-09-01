@@ -10,9 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tarellano.kayak.MainActivity">
 
-    <com.tarellano.kayak.views.KMapView
+    <!--<com.tarellano.kayak.views.KMapView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+    <!--/>-->
+
+    <com.tarellano.kayak.views.MyView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    />
+        />
 
 </RelativeLayout>

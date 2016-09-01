@@ -22,43 +22,6 @@ import java.util.Vector;
  */
 public class KMapView extends View {
 
-    class mListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onDown(MotionEvent e){
-            return true;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e){
-            float x = e.getX();
-            float y = e.getY();
-
-            Point loc = new Point(Math.round(e.getX()), Math.round(e.getY()));
-
-            for (Box box: boxes){
-                if (box.getRect().intersect(loc.x, loc.y, loc.x, loc.y)){
-                    box.setColor(getResources().getColor(R.color.seafoam));
-                    invalidate();
-                    return true;
-                }
-            }
-
-            if (map.intersect(loc.x, loc.y, loc.x, loc.y)){
-
-                mBackgroundPaint = new Paint(0);
-                mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
-                mBackgroundPaint.setStyle(Paint.Style.FILL);
-
-                Log.d(TAG, mBackgroundPaint.toString());
-                invalidate();
-                return true;
-            }
-
-
-            return true;
-        }
-    }
-
     private class Box{
 
         private Paint mBackgroundPaint;
@@ -88,22 +51,24 @@ public class KMapView extends View {
         public void setColor(int color){
             this.mBackgroundPaint.setColor(color);
         }
+
     }
 
     private GestureDetector mDetector = new GestureDetector(KMapView.this.getContext(), new mListener());
 
     private final static String TAG = "kmapView";
+
     private Paint mLinePaint;
     private Paint mBackgroundPaint;
     private Paint mBoxPaint;
     private Paint mAltBoxPaint;
     private static final int STROKE_WIDTH = 8;
-
     private static final int NUMBER_OF_VARIABLES = 4;
+
     private Rect map;
-
-
     private Vector<Box> boxes;
+
+    private boolean touched = false;
 
     private Path mPath = new Path();
 
@@ -148,7 +113,10 @@ public class KMapView extends View {
         canvas.drawRect(map, mBackgroundPaint);
 
         for (Box box : boxes) {
-            canvas.drawRect(box.getRect(), box.getBackgroundPaint());
+            if (!touched)
+                canvas.drawRect(box.getRect(), box.getBackgroundPaint());
+            else
+                canvas.drawRect(box.getRect(),mBoxPaint );
         }
 
         canvas.drawPath(mPath, mLinePaint);
@@ -211,5 +179,44 @@ public class KMapView extends View {
         }
         invalidate();
         return true;
+    }
+
+    class mListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e){
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e){
+            float x = e.getX();
+            float y = e.getY();
+
+            Point loc = new Point(Math.round(e.getX()), Math.round(e.getY()));
+
+            for (Box box: boxes){
+                if (box.getRect().intersect(loc.x, loc.y, loc.x, loc.y)){
+                    Log.d(TAG, "box has been tapped");
+                    touched = !touched;
+                    box.setColor(getResources().getColor(R.color.seafoam));
+                    invalidate();
+                    return true;
+                }
+            }
+
+            if (map.intersect(loc.x, loc.y, loc.x, loc.y)){
+
+                mBackgroundPaint = new Paint(0);
+                mBackgroundPaint.setColor(getResources().getColor(R.color.bluegrass));
+                mBackgroundPaint.setStyle(Paint.Style.FILL);
+
+                Log.d(TAG, mBackgroundPaint.toString());
+                invalidate();
+                return true;
+            }
+
+
+            return true;
+        }
     }
 }
